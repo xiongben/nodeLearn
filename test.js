@@ -1,5 +1,27 @@
 var http = require('http');
 var fs = require("fs");
+var mysql      = require('mysql');
+//var connection = mysql.createConnection({
+//host     : 'localhost',
+//user     : 'root',
+//password : 'root',
+//database : 'xiongben'
+//});
+// 
+//connection.connect();
+//var addsql="INSERT INTO test ( name, age, num, love) VALUES ( '希特勒', '40', '00550', '大德意志万岁')";
+//connection.query(addsql,function (err, result) {
+//      if(err){
+//        console.log('[SELECT ERROR] - ',err.message);
+//        return;
+//      }
+// 
+//     console.log('--------------------------SELECT----------------------------');
+//     console.log(result);
+//     console.log('------------------------------------------------------------\n\n');  
+//});
+// 
+//connection.end();
 //http.createServer(function (request, response) {
 //
 //	// 发送 HTTP 头部 
