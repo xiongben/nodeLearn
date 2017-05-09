@@ -2,6 +2,7 @@ var express=require('express');
 var fs = require("fs");
 var multer  = require('multer');
 var cookieParser = require('cookie-parser');
+var path=require('path');
 const child_process = require('child_process');
 var app=express();
 var url=require("url");
@@ -12,7 +13,7 @@ app.use(express.static('public'));
 var bodyParser = require('body-parser');
 app.use(multer({ dest: '/tmp/'}).array('image'));
 app.use(cookieParser());
- 
+
 // 创建 application/x-www-form-urlencoded 编码解析
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -20,13 +21,91 @@ app.get('/index.html', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );
 })
 
-let thisurl="http://localhost:8888/start/thatpage/okpage?name=xiongben&age=18";
+// let thisurl="http://localhost:8888/start/thatpage/okpage?name=xiongben&age=18";
+//
+// let urltest=url.parse(thisurl).pathname;
+// let urltest2=url.parse(thisurl,true).query;
+//
+// console.log(urltest);
+// console.log(urltest2.name);
 
-let urltest=url.parse(thisurl).pathname;
-let urltest2=url.parse(thisurl,true).query;
+// fs.exists('san.txt',function(exists){
+//   console.log("exists:"+exists);
+// })
+// fs.stat('san.txt',function(err,stats){
+//    if(err){throw err};
+//    console.log(stats);
+// })
 
-console.log(urltest);
-console.log(urltest2.name);
+//父进程
+// var exec=child_process.exec;
+// exec('node test.js',{env:{number:123}},function(err,stdout,stderr){
+//   if(err){throw err};
+//   console.log("stdout:\n",stdout);
+//   console.log("stderr:\n",stderr);
+// })
+
+var spawn=child_process.spawn;
+var child=spawn('node',['test.js']);
+setInterval(function(){
+  var number=Math.floor(Math.random()*10000);
+  child.stdin.write(number+"\n");
+  child.stdout.once('data',function(data){
+    console.log('child replied to '+number+" with "+data);
+  })
+},2000)
+
+// child.stdout.on('data',function(data){
+//   console.log("tail output:"+data);
+// })
+child.stderr.on('data',function(data){
+  console.log("tail err output:"+data);
+})
+
+
+// 读写文件
+// fs.open('san.txt','r',function(err,fd){
+//   if(err){throw err};
+//   var readBuffer=new Buffer(1024),
+//       bufferOffset=0,
+//       bufferLength=readBuffer.length,
+//       filePosition=0;
+//       fs.read(fd,readBuffer,bufferOffset,bufferLength,filePosition,function read(err,readBytes){
+//         if(err){throw err};
+//         console.log("just read "+readBytes+" bytes");
+//         if(readBytes>0){
+//           console.log(readBuffer.slice(0,readBytes));
+//         }
+//       });
+//
+// })
+//
+// fs.open('san.txt','a',function(err,fd){
+//   if(err){throw err};
+//   var writeBuffer=new Buffer("来呀来杯酒啊，愁情烦事别放心头。"),
+//       bufferPosition=0,
+//       bufferLength=writeBuffer.length,
+//       filePosition=null;
+//       fs.write(fd,writeBuffer,bufferPosition,bufferLength,filePosition,function wrote(err,written){
+//         if(err){throw err};
+//         console.log("just write: "+written);
+//
+//       });
+//
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -86,9 +165,9 @@ console.log(urltest2.name);
 //})
 //
 //app.post('/file_upload', function (req, res) {
-// 
+//
 // console.log(req.files[0]);  // 上传的文件信息
-// 
+//
 // var des_file = __dirname + "/public/images/" + req.files[0].originalname;
 // fs.readFile( req.files[0].path, function (err, data) {
 //      fs.writeFile(des_file, data, function (err) {
@@ -96,7 +175,7 @@ console.log(urltest2.name);
 //            console.log( err );
 //       }else{
 //             response = {
-//                 message:'File uploaded successfully', 
+//                 message:'File uploaded successfully',
 //                 filename:req.files[0].originalname
 //            };
 //        }
@@ -131,11 +210,11 @@ console.log(urltest2.name);
 //})
 
 
-//var server=app.listen(8022,function(){
-//	var host=server.address().address;
-//	var port=server.address().port;
-//	console.log("应用实例，访问地址为 http://%s:%s", host, port);
-//})
+var server=app.listen(8022,function(){
+	var host=server.address().address;
+	var port=server.address().port;
+	console.log("应用实例，访问地址为 http://%s:%s", host, port);
+})
 
 
 //for(var i=0; i<3; i++) {
